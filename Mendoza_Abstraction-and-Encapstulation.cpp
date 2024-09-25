@@ -33,6 +33,7 @@ void pause() {
 
 class SavingsAccount : public SubMenu { // derived class for savings
     private: 
+    // encapsulation - private data members store account details, not directly accessible from outside 
     int subChoice;
     double balance; 
     double depositAmount;
@@ -40,18 +41,21 @@ class SavingsAccount : public SubMenu { // derived class for savings
 
     public:
     SavingsAccount() : balance(1000), depositAmount(0), withdrawAmount(0) {}; // constructor for initialization
-
-    void deposit() override {
+    
+    // SAVINGS - DEPOSIT
+    void deposit() override { // abstraction
         cout << "Balance: Php " << fixed << setprecision(2) << balance << endl;
         string input;
 
+        // loop to enter and validate deposit 
         do {
             cout << "Enter amount to be deposited: Php ";
             cin >> input;
         } while (!isNumber(input));
 
-        depositAmount = stod(input);  // Convert the validated input to a double
+        depositAmount = stod(input);  // convert input from string to double
 
+        // update balance if deposit is valid
         if (depositAmount > 0){
             balance += depositAmount;
             cout << endl << "You have successfully deposited Php " << fixed << setprecision(2) << depositAmount << " to your Savings Account." << endl;
@@ -64,22 +68,29 @@ class SavingsAccount : public SubMenu { // derived class for savings
         pause();
     }
 
-    void withdraw() override {
+    // SAVINGS - WITHDRAW
+    void withdraw() override { // abstraction
         cout << "Balance: Php "<< fixed << setprecision(2) << balance << endl;
         string input;
 
+        // loop to enter and validate withdrawal
         do {
             cout << "Enter amount to be withdrawn: Php ";
             cin >> input;
         } while (!isNumber(input)); 
 
-        withdrawAmount = stod(input); 
+        withdrawAmount = stod(input); // convert input from string to double
 
-        if (withdrawAmount > 0 && withdrawAmount <= balance){
+        // update balance if withdrawal is valid
+        if (withdrawAmount > 0 && (balance - withdrawAmount) >= 1000){
             balance -= withdrawAmount;
 
             cout << endl << "You have successfully withdrawn Php " << fixed << setprecision(2) << withdrawAmount << " from your Savings Account." << endl;
             cout << "New Balance: Php " << balance << endl;
+        }
+        else if ((balance - withdrawAmount) < 1000){
+            cout << endl << "Failed to withdraw Php " << fixed << setprecision(2) << withdrawAmount << " from your Savings Account." << endl;
+            cout << "Note: Enter valid amount only. Balance cannot be less than Php 1000.00" << endl;
         }
         else {
             cout << endl << "Failed to withdraw Php " << fixed << setprecision(2) << withdrawAmount << " from your Savings Account." << endl;
@@ -88,12 +99,14 @@ class SavingsAccount : public SubMenu { // derived class for savings
         pause();
     }
 
-    void checkBalance() override {
+    // SAVINGS - BALANCE
+    void checkBalance() override { // abstraction
         cout << "Balance: Php " << fixed << setprecision(2) << balance << endl;
         pause();
     }
 
-    void displaySubMenu() override { 
+    // SAVINGS - SUBMENU
+    void displaySubMenu() override { // abstraction
         do {
             clearScreen();
             cout << "||========== Sub Menu for Savings Account ==========||" << endl;
@@ -107,13 +120,13 @@ class SavingsAccount : public SubMenu { // derived class for savings
             cin >> subChoice;
             cout << endl;
 
-            // Check if the input is valid (a number)
+            // handles invalid input
             if (cin.fail()) { 
-                cin.clear(); // Clear the fail state (caused by invalid input)
-                cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Discard invalid input
+                cin.clear(); // clears fail state (caused by invalid input)
+                cin.ignore(numeric_limits<streamsize>::max(), '\n'); // discard invalid input
                 cout << "Note: Enter a number from 1 to 3 only." << endl;
                 pause();
-                continue; // Restart the loop
+                continue; // restart loop
             }
 
             switch (subChoice){
@@ -144,25 +157,28 @@ class SavingsAccount : public SubMenu { // derived class for savings
 
 class CurrentAccount : public SubMenu { // derived class for current
     private: 
+    // encapsulation - private data members store account details, not directly accessible from outside 
     int subChoice;
     double balance; 
     double depositAmount;
     double withdrawAmount;
 
     public:
-    CurrentAccount() : balance(0), depositAmount(0), withdrawAmount(0) {};
-
-    void deposit() override {
+    CurrentAccount() : balance(0), depositAmount(0), withdrawAmount(0) {}; // constructor for initialization
+    // CURRENT - DEPOSIT
+    void deposit() override { // abstraction
         cout << "Balance: Php " << fixed << setprecision(2) << balance << endl;
         string input;
-
+        
+        // loop to enter and validate deposit 
         do {
             cout << "Enter amount to be deposited: Php ";
             cin >> input;
         } while (!isNumber(input));
 
-        depositAmount = stod(input);  // Convert the validated input to a double
+        depositAmount = stod(input);  // convert input from string to double
 
+        // update balance if deposit is valid
         if (depositAmount > 0){
             balance += depositAmount;
 
@@ -175,18 +191,20 @@ class CurrentAccount : public SubMenu { // derived class for current
         }
         pause();
     }
-
-    void withdraw() override {
+    // CURRENT - WITHDRAW
+    void withdraw() override { // abstraction
         cout << "Balance: Php "<< fixed << setprecision(2) << balance << endl;
         string input;
 
+        // loop to enter and validate withdrawal 
         do {
             cout << "Enter amount to be withdrawn: Php ";
             cin >> input;
         } while (!isNumber(input)); 
 
-        withdrawAmount = stod(input); 
+        withdrawAmount = stod(input); // convert input from string to double
 
+        // update balance if withdrawal is valid
         if (withdrawAmount > 0 && withdrawAmount <= balance){
             balance -= withdrawAmount;
 
@@ -199,13 +217,13 @@ class CurrentAccount : public SubMenu { // derived class for current
         }
         pause();
     }
-
+    // CURRENT - BALANCE
     void checkBalance() override {
         cout << "Balance: Php " << fixed << setprecision(2) << balance << endl;
         pause();
     }
-
-    void displaySubMenu() override { 
+    // CURRENT - SUBMENU
+    void displaySubMenu() override { // abstraction
         do {
             clearScreen();
             cout << "||========== Sub Menu for Current Account ==========||" << endl;
@@ -219,10 +237,10 @@ class CurrentAccount : public SubMenu { // derived class for current
             cin >> subChoice;
             cout << endl;
 
-            // Check if the input is valid (a number)
+            // handles invalid input
             if (cin.fail()) { 
-                cin.clear(); // Clear the fail state (caused by invalid input)
-                cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Discard invalid input
+                cin.clear(); // clears fail state (caused by invalid input)
+                cin.ignore(numeric_limits<streamsize>::max(), '\n'); // discard invalid input
                 cout << "Note: Enter a number from 1 to 3 only." << endl;
                 pause();
                 continue; // Restart the loop
@@ -271,10 +289,10 @@ int main (){
         cin >> menuChoice;
         cout << endl;
 
-        // Check if the input is valid (a number)
+        // handles invalid input
         if (cin.fail()) { 
-            cin.clear(); // Clear the fail state (caused by invalid input)
-            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Discard invalid input
+            cin.clear(); // clears fail state (caused by invalid input)
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // siscard invalid input
             cout << "Note: Enter a number from 1 to 3 only." << endl;
             pause();
             continue; // Restart the loop
@@ -304,6 +322,5 @@ int main (){
             pause();
         }
     } while (menuChoice != 3); // loops until user exits
-    
     return 0;
 }
